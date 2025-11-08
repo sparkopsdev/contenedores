@@ -1,0 +1,49 @@
+services:
+  postgres:
+    image: postgres:18
+    container_name: personAppDB
+    restart: unless-stopped
+    environment:
+      # PostgreSQL config
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+
+    volumes:
+      - pg-data:/var/lib/postgresql
+    ports:
+      - ${DB_PORT:-5432}:5432
+    networks:
+      - compose_network
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: personapi:latest
+    container_name: personAPI
+    restart: unless-stopped
+    environment:
+      # DB Env:
+      - DB_HOST=${DB_HOST}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+
+      # API Env:
+      - API_SERVER=&{API_SERVER}
+      - API_PORT=${API_PORT}
+      - DEBUG=${DEBUG}
+
+    ports:
+      - ${API_PORT:-8000}:8000
+    networks:
+      - compose_network
+
+volumes:
+  pg-data:
+
+networks:
+  compose_network:
+    name: API-network
+    driver: bridge
