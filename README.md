@@ -2,6 +2,8 @@
 
 API REST desarrollada en **FastAPI** y **PostgreSQL** para la gestión de personas.
 
+- [Enlace al repositorio](https://github.com/sparkopsdev/contenedores)
+
 ---
 
 ## 🚀 Descripción del proyecto
